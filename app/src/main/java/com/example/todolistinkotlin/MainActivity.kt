@@ -2,6 +2,7 @@ package com.example.todolistinkotlin
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolistinkotlin.databinding.ActivityMainBinding
+import com.example.usertracker.TrackerActions
+import com.example.usertracker.UserTracker
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.alert
 import java.text.SimpleDateFormat
@@ -35,6 +38,17 @@ class MainActivity : AppCompatActivity(), OnItemClick {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val context = this as Context
+
+        /* UserTracker */
+        UserTracker.initialize(
+            context,
+            "http://jsonplaceholder.typicode.com/post",
+            hashMapOf(TrackerActions.SERVER_STATUS to "serverstatus"),
+            5000,
+            3
+        )
+        UserTracker.appOpen()
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
@@ -154,5 +168,10 @@ class MainActivity : AppCompatActivity(), OnItemClick {
 
     override fun onStop() {
         super.onStop()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        UserTracker.appClose()
     }
 }

@@ -17,6 +17,8 @@ import androidx.lifecycle.MutableLiveData
 import com.example.todolistinkotlin.database.ToDoListDataEntity
 import com.example.todolistinkotlin.database.ToDoListDatabase
 import com.example.todolistinkotlin.notification.AlarmReceiver
+import com.example.usertracker.UserTracker
+import com.example.usertracker.dto.SerializedHashMap
 import java.util.*
 
 /**
@@ -59,6 +61,7 @@ class ToDoListViewModel(val context: Application) : AndroidViewModel(context) {
         Log.d("Click", "click")
         if (title.get().toString().isNotBlank() && date.get().toString().isNotBlank() && time.get().toString().isNotBlank()) {
             addData(title.get().toString(), date.get().toString(), time.get().toString(), id = index)
+            UserTracker.appData(SerializedHashMap(hashMapOf<String, Any>("title" to title, "date" to date, "time" to time)))
             title.set("")
             date.set("")
             time.set("")
